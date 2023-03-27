@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+.vscode
+.cache
+.idea
+yarn-error.log
+npm-debug.log
+ecosystem.config.env.js
+ecosystem.config.js
+nodemon.json
+logs
