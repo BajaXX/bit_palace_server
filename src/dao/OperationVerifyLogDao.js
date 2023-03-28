@@ -6,13 +6,13 @@ const Op = Sequelize.Op
 class OperationVerifyLogDao {
     static async save(data) {
         // 开启事务
-        const t = await sequelize.transaction()
+        const t = await Sequelize.transaction()
         try {
             // 冻结金额增加5，余额减少5
             const [affectedRows] = await UserInfo.update(
                 {
-                    frozenToken: sequelize.literal(`frozenToken + ${ONE_AWARD}`),
-                    updateTime: sequelize.fn('UNIX_TIMESTAMP')
+                    frozenToken: Sequelize.literal(`frozenToken + ${ONE_AWARD}`),
+                    updateTime: Sequelize.fn('UNIX_TIMESTAMP')
                 },
                 {
                     where: {
@@ -81,7 +81,7 @@ class OperationVerifyLogDao {
                     WHERE a.status = 0;
                 `
 
-        const [results] = await sequelize.query(query, { type: QueryTypes.UPDATE })
+        const [results] = await Sequelize.query(query, { type: QueryTypes.UPDATE })
         return results
     }
     static async getOperationVerifyLogById(pid) {

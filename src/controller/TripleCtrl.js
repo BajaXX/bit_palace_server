@@ -10,7 +10,11 @@ class TripleCtrl {
             // 根据钱包地址查询用户信息，如果不存在则创建新用户并返回nonce值
 
             const one = await TripleInfoDao.getRandOne()
-            Common.sendResult(ctx, one)
+            if (one) {
+                Common.sendResult(ctx, one)
+            } else {
+                Common.sendResult(ctx, ERRORCODE.NO_USE_TRIPLE)
+            }
         } catch (error) {
             console.log(error)
             Common.sendResult(ctx, ERRORCODE.BASE_ERROR)

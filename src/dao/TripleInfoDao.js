@@ -16,10 +16,10 @@ class TripleInfoDao {
 
     static async getRandOne() {
         const randomTriple = await TripleInfo.findOne({
-            where: sequelize.literal(
+            where: Sequelize.literal(
                 `NOT EXISTS (SELECT 1 FROM OperationVerifyLog WHERE OperationVerifyLog.tripleID = TripleInfo.tripleID)`
             ),
-            order: sequelize.random()
+            order: Sequelize.literal('RAND()')
         })
         return randomTriple
     }

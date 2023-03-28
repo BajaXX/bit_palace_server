@@ -8,6 +8,8 @@ module.exports = {
     //////////业务码10  用户类//////////////
     ADDRESS_IS_ERROR: { ERRORCODE: 'JM100001', RESULT: '钱包地址缺失' },
     BALANCE_DEFICIENCY: { ERRORCODE: 'JM100002', RESULT: '余额不足' },
+    //////////业务码11  用户类//////////////
+    NO_USE_TRIPLE: { ERRORCODE: 'JM110001', RESULT: '没有更新的题目' },
 
     CUSTOM_ERROR: customError
 }
@@ -21,3 +23,4 @@ function customError(data) {
 //错误码定义,以JM开头，两位业务吗，4位错误码
 //业务码对照表
 //10  用户类
+//11  题库类

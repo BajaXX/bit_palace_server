@@ -1,3 +1,4 @@
+const { ONE_AWARD } = require('../config/contants')
 const ERRORCODE = require('../config/ERRORCODE')
 const OperationVerifyLogDao = require('../dao/OperationVerifyLogDao')
 const UserInfoDao = require('../dao/UserInfoDao')
