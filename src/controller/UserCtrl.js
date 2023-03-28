@@ -22,6 +22,9 @@ class UserCtrl {
             Common.sendResult(ctx, ERRORCODE.BASE_ERROR)
         }
     }
+    static async ping(ctx) {
+        Common.sendResult(ctx, ~~(Date.now() / 1000))
+    }
 
     static async login(ctx) {
         try {
