@@ -7,6 +7,7 @@ const router = new Router({
 
 //user
 router.post('/login', UserCtrl.login)
+router.post('/getNonceToSign', UserCtrl.getNonceToSign)
 router.post('/getUser', auth, UserCtrl.getUser)
 router.post('/ping', UserCtrl.ping)
 
