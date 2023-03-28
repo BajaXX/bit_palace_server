@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const TripleCtrl = require('../../controller/TripleCtrl')
 const auth = require('../../middlewares/auth')
 const router = new Router({
-    prefix: '/api/user'
+    prefix: '/api/triple'
 })
 
 //Triple
