@@ -4,7 +4,7 @@ const Op = Sequelize.Op
 
 class UserNonceDao {
     static async save(data) {
-        return UserNonce.create(data)
+        return UserNonce.upsert(data)
     }
     static async update(data) {
         return UserNonce.update(data, {

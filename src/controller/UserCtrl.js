@@ -15,7 +15,7 @@ class UserCtrl {
 
             const nonce = Math.floor(Math.random() * 1000000000).toString()
             // 更新用户的nonce值
-            await UserNonceDao.update({ walletAddress, nonce })
+            await UserNonceDao.save({ tokenID: walletAddress, nonce })
             Common.sendResult(ctx, nonce)
         } catch (error) {
             console.log(error)
