@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { jwtConfig, TOKEN_KEY, environments } = require('../config')
 const ERRORCODE = require('../config/ERRORCODE')
-const UserInfoDao = require('../dao/userInfoDao')
+const UserInfoDao = require('../dao/UserInfoDao')
 
 const auth = async (ctx, next) => {
     const xAuthToken = ctx.request.headers['x-auth-token']

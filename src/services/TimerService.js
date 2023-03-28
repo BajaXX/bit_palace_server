@@ -1,6 +1,6 @@
 const ERRORCODE = require('../config/ERRORCODE')
 const OperationVerifyLogDao = require('../dao/OperationVerifyLogDao')
-const UserInfoDao = require('../dao/userInfoDao')
+const UserInfoDao = require('../dao/UserInfoDao')
 
 class TimerService {
     static async correction() {
