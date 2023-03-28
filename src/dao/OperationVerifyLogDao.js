@@ -1,44 +1,78 @@
 const OperationVerifyLog = require('../models/OperationVerifyLog')
 const Sequelize = require('sequelize')
 const { ONE_AWARD } = require('../config/contants')
+const ERRORCODE = require('../config/ERRORCODE')
+const { Transaction } = require('sequelize')
 const Op = Sequelize.Op
+const { mysql_BITPALACE } = require('../core/mysql')
 
 class OperationVerifyLogDao {
     static async save(data) {
-        // 开启事务
-        const t = await Sequelize.transaction()
-        try {
-            // 冻结金额增加5，余额减少5
-            const [affectedRows] = await UserInfo.update(
-                {
-                    frozenToken: Sequelize.literal(`frozenToken + ${ONE_AWARD}`),
-                    updateTime: Sequelize.fn('UNIX_TIMESTAMP')
-                },
-                {
-                    where: {
-                        tokenID,
-                        balance: { [Sequelize.Op.gte]: ONE_AWARD }
+        await mysql_BITPALACE
+            .transaction(async (t) => {
+                // 冻结金额增加5，余额减少5
+                const [affectedRows] = await UserInfo.update(
+                    {
+                        frozenToken: Sequelize.literal(`frozenToken + ${ONE_AWARD}`),
+                        updateTime: Sequelize.fn('UNIX_TIMESTAMP')
                     },
-                    transaction: t
+                    {
+                        where: {
+                            tokenID,
+                            balance: { [Sequelize.Op.gte]: ONE_AWARD }
+                        },
+                        transaction: t
+                    }
+                )
+
+                if (affectedRows !== 1) {
+                    // 更新失败，回滚事务
+                    throw ERRORCODE.COMMIT_ERROR
                 }
-            )
 
-            if (affectedRows !== 1) {
-                // 更新失败，回滚事务
-                await t.rollback()
-                throw new Error(`Failed to update UserInfo balance for tokenID ${tokenID}`)
-            }
+                // 插入答案记录
+                await OperationVerifyLog.create(data, { transaction: t })
+            })
+            .then(() => {
+                console.log('Transaction has been committed')
+            })
+            .catch((error) => {
+                console.error('Transaction has been rolled back', error)
+            })
+        // // 开启事务
+        // const t = await Sequelize.transaction()
+        // try {
+        //     // 冻结金额增加5，余额减少5
+        //     const [affectedRows] = await UserInfo.update(
+        //         {
+        //             frozenToken: Sequelize.literal(`frozenToken + ${ONE_AWARD}`),
+        //             updateTime: Sequelize.fn('UNIX_TIMESTAMP')
+        //         },
+        //         {
+        //             where: {
+        //                 tokenID,
+        //                 balance: { [Sequelize.Op.gte]: ONE_AWARD }
+        //             },
+        //             transaction: t
+        //         }
+        //     )
 
-            // 插入答案记录
-            await OperationVerifyLog.create(data, { transaction: t })
+        //     if (affectedRows !== 1) {
+        //         // 更新失败，回滚事务
+        //         await t.rollback()
+        //         throw new Error(`Failed to update UserInfo balance for tokenID ${tokenID}`)
+        //     }
 
-            // 提交事务
-            await t.commit()
-        } catch (error) {
-            // 回滚事务
-            await t.rollback()
-            throw error
-        }
+        //     // 插入答案记录
+        //     await OperationVerifyLog.create(data, { transaction: t })
+
+        //     // 提交事务
+        //     await t.commit()
+        // } catch (error) {
+        //     // 回滚事务
+        //     await t.rollback()
+        //     throw error
+        // }
     }
     static async update(data) {
         return OperationVerifyLog.update(data, {

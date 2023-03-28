@@ -12,7 +12,7 @@ class UserInfoDao {
         return await UserInfo.findOne({
             where: {
                 tokenID,
-                ustatus: 1
+                status: 1
             },
             attributes: ['accessToken', 'expireTime'],
             raw: true
@@ -22,7 +22,7 @@ class UserInfoDao {
         const user = await UserInfo.findOne({
             where: {
                 tokenID,
-                ustatus: 1
+                status: 1
             },
             attributes: { exclude: ['accessToken', 'expireTime'] },
             raw: true

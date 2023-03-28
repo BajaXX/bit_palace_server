@@ -8,8 +8,10 @@ module.exports = {
     //////////业务码10  用户类//////////////
     ADDRESS_IS_ERROR: { ERRORCODE: 'JM100001', RESULT: '钱包地址缺失' },
     BALANCE_DEFICIENCY: { ERRORCODE: 'JM100002', RESULT: '余额不足' },
+    NO_NONCE: { ERRORCODE: 'JM100003', RESULT: '请获取nonce再登录' },
     //////////业务码11  用户类//////////////
     NO_USE_TRIPLE: { ERRORCODE: 'JM110001', RESULT: '没有更新的题目' },
+    COMMIT_ERROR: { ERRORCODE: 'JM110002', RESULT: '提交答案失败' },
 
     CUSTOM_ERROR: customError
 }
