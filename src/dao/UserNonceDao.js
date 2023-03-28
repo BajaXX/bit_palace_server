@@ -4,6 +4,7 @@ const Op = Sequelize.Op
 
 class UserNonceDao {
     static async save(data) {
+        data.updateTime = ~~(Date.now() / 1000)
         return UserNonce.upsert(data)
     }
     static async update(data) {
