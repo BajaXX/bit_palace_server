@@ -2,16 +2,16 @@ class Common {
     static sendResult(ctx, data) {
         ctx.response.status = 200
         if (data.ERRORCODE) {
-            console.log('-------------有错误:', ctx.path, data.ERRORCODE, data.RESULT)
+            console.log('-------------ERROR:', ctx.path, data.ERRORCODE, data.RESULT)
             ctx.body = {
-                ERRORCODE: data.ERRORCODE,
-                RESULT: data.RESULT
+                ERRORCODE: data.ERRORCODE
+                // RESULT: data.RESULT
             }
         } else {
             if (Object.prototype.toString.call(data) == '[object Error]') {
                 ctx.body = {
-                    ERRORCODE: 'JM000000',
-                    RESULT: '未知错误'
+                    ERRORCODE: 'JM000000'
+                    // RESULT: 'Unknown error'
                 }
             } else {
                 ctx.body = {
