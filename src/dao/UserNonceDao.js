@@ -9,7 +9,7 @@ class UserNonceDao {
     static async update(data) {
         return UserNonce.update(data, {
             where: {
-                tokenID: data.tokenID
+                tokenID: data.walletAddress
             }
         })
     }
