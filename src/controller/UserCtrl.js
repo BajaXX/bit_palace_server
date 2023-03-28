@@ -37,8 +37,7 @@ class UserCtrl {
             const existingNonce = await UserNonceDao.getUserNonceByTokenID(walletAddress)
             if (!existingNonce) throw ERRORCODE.NO_NONCE
 
-            const recoveredAddress = recoverAddress(SIGNATURE_DESCRIPTION + existingNonce, signature)
-
+            const recoveredAddress = recoverAddress(SIGNATURE_DESCRIPTION + existingNonce.nonce, signature)
             // 对签名进行验证，确认签名是由用户钱包生成的，并且签名内容正确
             if (recoveredAddress.toLowerCase() !== walletAddress) {
                 Common.sendResult(ctx, ERRORCODE.VERIFY_FAIL_RELOGIN)
@@ -46,7 +45,7 @@ class UserCtrl {
             }
 
             // 查询用户信息
-            const userInfo = await UserInfoDao.getUserInfoByWalletAddress(walletAddress)
+            let userInfo = await UserInfoDao.getUserInfoByWalletAddress(walletAddress)
 
             const expireTime = dayjs().add(jwtConfig.expires, 'second').unix()
             const nowTime = ~~(Date.now() / 1000)

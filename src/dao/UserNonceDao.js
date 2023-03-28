@@ -25,7 +25,8 @@ class UserNonceDao {
         return UserNonce.findOne({
             where: {
                 tokenID
-            }
+            },
+            raw: true
         })
     }
 }

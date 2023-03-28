@@ -53,7 +53,7 @@ class UserInfoDao {
         data.updateTime = ~~(Date.now() / 1000)
         const [affectedCount] = await UserInfo.update(data, {
             where: {
-                tokenID: data.toeknID
+                tokenID: data.tokenID
             }
         })
         return affectedCount
