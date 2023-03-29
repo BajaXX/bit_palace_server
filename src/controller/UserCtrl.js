@@ -100,7 +100,11 @@ class UserCtrl {
 
             const res = await UserInfoDao.getUserInfoByWalletAddress(walletAddress)
 
-            Common.sendResult(ctx, res)
+            if (res) {
+                Common.sendResult(ctx, res)
+            } else {
+                throw ERRORCODE.USER_IS_NOT_EXISTS
+            }
         } catch (e) {
             console.log(e)
             if (e.ERRORCODE == 'JM000001') {

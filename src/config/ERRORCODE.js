@@ -5,6 +5,7 @@ module.exports = {
     MSG_TOKEN_IS_ERROR: { ERRORCODE: 'JM000003', RESULT: '登陆信息有误请重新登陆' },
     PLEASE_RELOGIN: { ERRORCODE: 'JM000004', RESULT: '你的账号在其他设备登录，请重新登录' },
     VERIFY_FAIL_RELOGIN: { ERRORCODE: 'JM000005', RESULT: '验签失败，请用钱包重新登录' },
+    USER_IS_NOT_EXISTS: { ERRORCODE: 'JM000006', RESULT: '用户不存在' },
     //////////业务码10  用户类//////////////
     ADDRESS_IS_ERROR: { ERRORCODE: 'JM100001', RESULT: '钱包地址缺失' },
     BALANCE_DEFICIENCY: { ERRORCODE: 'JM100002', RESULT: '余额不足' },
