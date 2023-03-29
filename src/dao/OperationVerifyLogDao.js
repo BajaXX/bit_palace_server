@@ -4,6 +4,7 @@ const { ONE_AWARD } = require('../config/contants')
 const ERRORCODE = require('../config/ERRORCODE')
 const { Transaction } = require('sequelize')
 const Op = Sequelize.Op
+const QueryTypes = Sequelize.QueryTypes
 const { mysql_BITPALACE } = require('../core/mysql')
 
 class OperationVerifyLogDao {
@@ -114,8 +115,7 @@ class OperationVerifyLogDao {
                         a.updateTime = UNIX_TIMESTAMP()
                     WHERE a.status = 0;
                 `
-
-        const [results] = await Sequelize.query(query, { type: QueryTypes.UPDATE })
+        const [results] = await mysql_BITPALACE.query(query, { type: QueryTypes.UPDATE })
         return results
     }
     static async getOperationVerifyLogById(pid) {

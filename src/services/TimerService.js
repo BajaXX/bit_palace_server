@@ -5,6 +5,7 @@ const UserInfoDao = require('../dao/UserInfoDao')
 
 class TimerService {
     static async correction() {
+        console.log('执行批改任务')
         //获取所有状态为未处理的答案，挑出回答人超过3个的奇数的题号
         return await OperationVerifyLogDao.correctAnswers()
     }
