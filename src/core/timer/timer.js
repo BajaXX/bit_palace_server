@@ -9,7 +9,7 @@ module.exports = {
         })
 
         //每小时发放奖励
-        schedule.scheduleJob('0 * * * * *', () => {
+        schedule.scheduleJob('0 0 * * * *', () => {
             TimerService.awardUser()
         })
     }
