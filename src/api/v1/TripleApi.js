@@ -6,7 +6,7 @@ const router = new Router({
 })
 
 //Triple
-router.post('/getOneTriple', TripleCtrl.getOneTriple)
-router.post('/commitAnswer', TripleCtrl.commitAnswer)
+router.post('/getOneTriple', auth, TripleCtrl.getOneTriple)
+router.post('/commitAnswer', auth, TripleCtrl.commitAnswer)
 
 module.exports = router

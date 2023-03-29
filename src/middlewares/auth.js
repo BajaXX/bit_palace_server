@@ -18,7 +18,7 @@ const auth = async (ctx, next) => {
             throw ERRORCODE.USER_NO_LOGIN
         }
         ctx.state.userInfo = user
-        ctx.request.body.walletaddress = user.tokenID
+        ctx.request.body.walletAddress = user.tokenID
         if (process.env.NODE_ENV == 'development') console.log(ctx.request.path + ':', ctx.request.body)
     } catch (error) {
         console.log('error:', error.name)
