@@ -4,10 +4,9 @@ const ERRORCODE = require('../config/ERRORCODE')
 const UserInfoDao = require('../dao/UserInfoDao')
 
 const auth = async (ctx, next) => {
-    const xAuthToken = ctx.request.headers['x-auth-token']
+    const xAuthToken = ctx.request.token
     // 无带token
     if (!xAuthToken) {
-        console.log(ctx.request.path)
         throw ERRORCODE.USER_NO_LOGIN
     }
     try {
