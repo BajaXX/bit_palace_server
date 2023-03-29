@@ -92,9 +92,13 @@ class UserCtrl {
 
     static async getUser(ctx) {
         try {
-            let body = ctx.request.body
+            const { walletAddress } = ctx.request.body
+            if (!walletAddress) {
+                Common.sendResult(ctx, ERRORCODE.ADDRESS_IS_ERROR)
+                return
+            }
 
-            const res = await UserInfoDao.getUserInfo(body)
+            const res = await UserInfoDao.getUserInfoByWalletAddress(walletAddress)
 
             Common.sendResult(ctx, res)
         } catch (e) {
