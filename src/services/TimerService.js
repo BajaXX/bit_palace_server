@@ -16,11 +16,11 @@ class TimerService {
         //循环处理发送奖励
         //1 如果验证结果为正确，修改账户余额+5，反之-5，不管增减都将释放提交答案时的冻结金额数量
         for (const answer of verifiedAnswers) {
-            const { id, verifyResult } = answer
+            const { id, verifyResult, tokenID, tripleID } = answer
 
             // Add or subtract 5 from user's account balance based on verification result
             const rewardAmount = verifyResult === 1 ? ONE_AWARD : -ONE_AWARD
-            await UserInfoDao.updateBalanceAndFrozenToken(tokenID, id, rewardAmount)
+            await UserInfoDao.updateBalanceAndFrozenToken(tokenID, tripleID, id, rewardAmount)
             //写入交易记录表
         }
     }

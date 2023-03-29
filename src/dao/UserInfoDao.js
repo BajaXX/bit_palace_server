@@ -7,6 +7,7 @@ const { randomUUID } = require('crypto')
 const { mysql_BITPALACE } = require('../core/mysql')
 
 const Op = Sequelize.Op
+const QueryTypes = Sequelize.QueryTypes
 
 class UserInfoDao {
     static async getAccessToken(tokenID) {
@@ -59,7 +60,7 @@ class UserInfoDao {
         return affectedCount
     }
 
-    static async updateBalanceAndFrozenToken(tokenID, id, balanceChange) {
+    static async updateBalanceAndFrozenToken(tokenID, tripleID, id, balanceChange) {
         // 开启事务
         await mysql_BITPALACE
             .transaction(async (t) => {
@@ -70,16 +71,16 @@ class UserInfoDao {
                         formUserID: SYSTEM_ACCOUNT, // 转出账户为系统固定账号
                         toUserID: tokenID,
                         amount: ONE_AWARD,
-                        remark: balanceChange > 0 ? `奖励-${id}` : `惩罚-${id}`,
+                        remark: balanceChange > 0 ? `奖励-${tripleID}` : `惩罚-${tripleID}`,
                         createTime: ~~(Date.now() / 1000) // 以秒为单位
                     },
                     { transaction: t }
                 )
                 const [affectedRowsUser] = await UserInfo.update(
                     {
-                        balance: sequelize.literal(`balance + ${balanceChange}`),
-                        frozenToken: sequelize.literal(`frozenToken - ${ONE_AWARD}`),
-                        updateTime: sequelize.fn('UNIX_TIMESTAMP')
+                        balance: Sequelize.literal(`balance + ${balanceChange}`),
+                        frozenToken: Sequelize.literal(`frozenToken - ${ONE_AWARD}`),
+                        updateTime: Sequelize.fn('UNIX_TIMESTAMP')
                     },
                     {
                         where: {
@@ -97,8 +98,8 @@ class UserInfoDao {
                 //修改系统的余额表
                 const [affectedRowsSystem] = await UserInfo.update(
                     {
-                        balance: sequelize.literal(`balance + ${balanceChange > 0 ? -ONE_AWARD : ONE_AWARD}`),
-                        updateTime: sequelize.fn('UNIX_TIMESTAMP')
+                        balance: Sequelize.literal(`balance + ${balanceChange > 0 ? -ONE_AWARD : ONE_AWARD}`),
+                        updateTime: Sequelize.fn('UNIX_TIMESTAMP')
                     },
                     {
                         where: {
@@ -113,16 +114,16 @@ class UserInfoDao {
                 }
 
                 // 更新状态为已奖励
-                await sequelize.query(`UPDATE OperationVerifyLog SET status = 2 WHERE status = 1 AND id='${id}')`, {
+                await mysql_BITPALACE.query(`UPDATE OperationVerifyLog SET status = 2 WHERE status = 1 AND id='${id}'`, {
                     type: QueryTypes.UPDATE,
                     transaction: t
                 })
             })
             .then(() => {
-                console.log('Transaction has been committed')
+                console.log('奖励执行完成')
             })
             .catch((error) => {
-                console.error('Transaction has been rolled back', error)
+                console.error('奖励执行失败，已回滚', error)
             })
     }
 }
