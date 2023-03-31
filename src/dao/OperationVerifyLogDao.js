@@ -6,6 +6,7 @@ const { Transaction } = require('sequelize')
 const Op = Sequelize.Op
 const QueryTypes = Sequelize.QueryTypes
 const { mysql_BITPALACE } = require('../core/mysql')
+const UserInfo = require('../models/UserInfo')
 
 class OperationVerifyLogDao {
     static async save(data) {
