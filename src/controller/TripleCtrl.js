@@ -35,9 +35,8 @@ class TripleCtrl {
                 createTime: ~~(Date.now() / 1000),
                 updateTime: ~~(Date.now() / 1000)
             }
-
-            await OperationVerifyLogDao.save(answer)
-            Common.sendResult(ctx, { tripleID, result: true })
+            const result = await OperationVerifyLogDao.save(answer)
+            Common.sendResult(ctx, { tripleID, result: result })
         } catch (error) {
             console.log(error)
             Common.sendResult(ctx, ERRORCODE.BASE_ERROR)

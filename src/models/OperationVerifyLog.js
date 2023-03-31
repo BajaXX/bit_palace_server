@@ -43,7 +43,7 @@ OperationVerifyLog.init(
         },
         verifyResult: {
             type: DataTypes.INTEGER(1),
-            allowNull: false,
+            allowNull: true,
             defaultValue: null,
             primaryKey: false,
             autoIncrement: false,

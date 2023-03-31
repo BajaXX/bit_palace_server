@@ -10,7 +10,7 @@ const UserInfo = require('../models/UserInfo')
 
 class OperationVerifyLogDao {
     static async save(data) {
-        await mysql_BITPALACE
+        return await mysql_BITPALACE
             .transaction(async (t) => {
                 // 冻结金额增加5，余额减少5
                 const [affectedRows] = await UserInfo.update(
@@ -20,7 +20,7 @@ class OperationVerifyLogDao {
                     },
                     {
                         where: {
-                            tokenID,
+                            tokenID: data.tokenID,
                             balance: { [Sequelize.Op.gte]: ONE_AWARD }
                         },
                         transaction: t
@@ -37,44 +37,12 @@ class OperationVerifyLogDao {
             })
             .then(() => {
                 console.log('Transaction has been committed')
+                return true
             })
             .catch((error) => {
                 console.error('Transaction has been rolled back', error)
+                return false
             })
-        // // 开启事务
-        // const t = await Sequelize.transaction()
-        // try {
-        //     // 冻结金额增加5，余额减少5
-        //     const [affectedRows] = await UserInfo.update(
-        //         {
-        //             frozenToken: Sequelize.literal(`frozenToken + ${ONE_AWARD}`),
-        //             updateTime: Sequelize.fn('UNIX_TIMESTAMP')
-        //         },
-        //         {
-        //             where: {
-        //                 tokenID,
-        //                 balance: { [Sequelize.Op.gte]: ONE_AWARD }
-        //             },
-        //             transaction: t
-        //         }
-        //     )
-
-        //     if (affectedRows !== 1) {
-        //         // 更新失败，回滚事务
-        //         await t.rollback()
-        //         throw new Error(`Failed to update UserInfo balance for tokenID ${tokenID}`)
-        //     }
-
-        //     // 插入答案记录
-        //     await OperationVerifyLog.create(data, { transaction: t })
-
-        //     // 提交事务
-        //     await t.commit()
-        // } catch (error) {
-        //     // 回滚事务
-        //     await t.rollback()
-        //     throw error
-        // }
     }
     static async update(data) {
         return OperationVerifyLog.update(data, {
