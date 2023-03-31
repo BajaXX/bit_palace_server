@@ -13,6 +13,7 @@ module.exports = {
     //////////业务码11  用户类//////////////
     NO_USE_TRIPLE: { ERRORCODE: 'JM110001', RESULT: '没有更新的题目' },
     COMMIT_ERROR: { ERRORCODE: 'JM110002', RESULT: '提交答案失败' },
+    DUPLICATE_COMMIT: { ERRORCODE: 'JM110003', RESULT: '重复提交答案' },
 
     CUSTOM_ERROR: customError
 }

@@ -38,8 +38,7 @@ class TripleCtrl {
             const result = await OperationVerifyLogDao.save(answer)
             Common.sendResult(ctx, { tripleID, result: result })
         } catch (error) {
-            console.log(error)
-            Common.sendResult(ctx, ERRORCODE.BASE_ERROR)
+            Common.sendResult(ctx, error)
         }
     }
 }

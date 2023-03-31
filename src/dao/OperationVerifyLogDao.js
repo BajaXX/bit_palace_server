@@ -40,8 +40,12 @@ class OperationVerifyLogDao {
                 return true
             })
             .catch((error) => {
-                console.error('Transaction has been rolled back', error)
-                return false
+                if (error.message === 'Validation error') {
+                    console.error('Transaction has been rolled back', error.message)
+                    throw ERRORCODE.DUPLICATE_COMMIT
+                } else {
+                    throw ERRORCODE.COMMIT_ERROR
+                }
             })
     }
     static async update(data) {
