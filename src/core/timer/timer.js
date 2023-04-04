@@ -9,8 +9,12 @@ module.exports = {
         })
 
         //每小时发放奖励
-        schedule.scheduleJob('0 0 * * * *', () => {
+        schedule.scheduleJob('0 10 * * * *', () => {
             TimerService.awardUser()
+        })
+        //每6小时上链
+        schedule.scheduleJob('0 * * * * *', () => {
+            TimerService.recordOnChain()
         })
     }
 }

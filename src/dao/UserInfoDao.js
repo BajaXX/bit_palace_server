@@ -1,7 +1,7 @@
 const UserInfo = require('../models/UserInfo')
 const Sequelize = require('sequelize')
 const ERRORCODE = require('../config/ERRORCODE')
-const { ONE_AWARD, SYSTEM_ACCOUNT } = require('../config/contants')
+const { ONE_AWARD, REWARD_ACCOUNT } = require('../config/contants')
 const TransferLog = require('../models/TransferLog')
 const { randomUUID } = require('crypto')
 const { mysql_BITPALACE } = require('../core/mysql')
@@ -68,7 +68,7 @@ class UserInfoDao {
                 await TransferLog.create(
                     {
                         transferID: randomUUID().replace(/-/g, ''), // 生成去掉横杆的UUID
-                        formUserID: SYSTEM_ACCOUNT, // 转出账户为系统固定账号
+                        formUserID: REWARD_ACCOUNT, // 转出账户为系统固定账号
                         toUserID: tokenID,
                         amount: ONE_AWARD,
                         remark: balanceChange > 0 ? `奖励-${tripleID}` : `惩罚-${tripleID}`,
@@ -103,7 +103,7 @@ class UserInfoDao {
                     },
                     {
                         where: {
-                            tokenID: SYSTEM_ACCOUNT
+                            tokenID: REWARD_ACCOUNT
                         },
                         transaction: t // 添加事务
                     }

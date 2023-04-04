@@ -7,6 +7,7 @@ const Op = Sequelize.Op
 const QueryTypes = Sequelize.QueryTypes
 const { mysql_BITPALACE } = require('../core/mysql')
 const UserInfo = require('../models/UserInfo')
+const _ = require('lodash')
 
 class OperationVerifyLogDao {
     static async save(data) {
@@ -70,6 +71,32 @@ class OperationVerifyLogDao {
         })
         return verifiedAnswers
     }
+
+    static async getAwardedUsers() {
+        const awardedUsers = await OperationVerifyLog.findAll({
+            where: {
+                status: 2,
+                txInfo: null,
+                verifyResult: 1
+            },
+            attributes: ['id', 'tokenID', 'tripleID']
+        })
+
+        const grouped = _.groupBy(awardedUsers, 'tokenID')
+        const result = _.map(grouped, (group) => {
+            const ids = _.map(group, 'id')
+            const tripleIDs = _.map(group, 'tripleID')
+            return {
+                tokenID: group[0].tokenID,
+                count: group.length,
+                tripleIDs,
+                ids
+            }
+        })
+
+        return result
+    }
+
     static async correctAnswers() {
         const query = `
                     UPDATE OperationVerifyLog a
@@ -105,6 +132,41 @@ class OperationVerifyLogDao {
                 status: 0
             }
         })
+    }
+
+    static async updateTxInfo(txHash, tokenID, ids, amount) {
+        let updatedRows = 0
+
+        await mysql_BITPALACE.transaction(async (t) => {
+            // 将需要更新 txInfo 的数据的 txInfo 字段值修改为 txHash
+            updatedRows = await OperationVerifyLog.update(
+                { txInfo: txHash, status: 3 },
+                { where: { id: { [Sequelize.Op.in]: ids }, tokenID: tokenID, txInfo: null }, transaction: t }
+            )
+
+            console.log(updatedRows[0], ids.length)
+
+            // 如果更新行数不等于 ids 数组的长度，则说明更新失败，回滚事务
+            if (updatedRows[0] !== ids.length) {
+                throw new Error('Failed to update txInfo')
+            }
+
+            // 更新用户表的余额
+            const [affectedRows] = await UserInfo.update(
+                { balance: Sequelize.literal(`balance - ${amount}`), updateTime: Sequelize.fn('UNIX_TIMESTAMP') },
+                {
+                    where: { tokenID: tokenID, [Sequelize.Op.and]: Sequelize.literal(`balance - frozenToken >= ${ONE_AWARD}`) },
+                    transaction: t
+                }
+            )
+
+            // 如果更新行数不等于 1，则说明更新失败，回滚事务
+            if (affectedRows !== 1) {
+                throw new Error('Failed to update user balance')
+            }
+        })
+
+        return updatedRows
     }
 }
 

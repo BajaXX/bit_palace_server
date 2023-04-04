@@ -53,5 +53,13 @@ module.exports = {
     ],
     SIGNATURE_DESCRIPTION: 'Welcome to use BitPalace! This is a safe signature, you will login safely with a random nonce: ',
 
-    port: process.env.API_PORT
+    port: process.env.API_PORT,
+
+    INFURA_API_KEY: '6383aa210bd14e6593a4652e71e012d4',
+
+    MUMBAI_RPC_URL: 'https://polygon-mumbai.infura.io/v3/',
+
+    REWARD_PK: process.env.REWARD_PK,
+
+    WEI: 1000000000000000000
 }
