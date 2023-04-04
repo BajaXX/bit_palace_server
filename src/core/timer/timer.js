@@ -13,7 +13,7 @@ module.exports = {
             TimerService.awardUser()
         })
         //每6小时上链
-        schedule.scheduleJob('0 * * * * *', () => {
+        schedule.scheduleJob('0 30 * * * *', () => {
             TimerService.recordOnChain()
         })
     }
