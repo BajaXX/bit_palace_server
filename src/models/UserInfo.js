@@ -33,7 +33,7 @@ UserInfo.init(
             field: 'frozenToken'
         },
         accessToken: {
-            type: DataTypes.STRING(50),
+            type: DataTypes.STRING(2000),
             allowNull: true,
             defaultValue: null,
             primaryKey: false,
