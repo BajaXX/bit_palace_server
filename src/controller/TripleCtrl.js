@@ -20,6 +20,21 @@ class TripleCtrl {
             Common.sendResult(ctx, ERRORCODE.BASE_ERROR)
         }
     }
+    static async getLiveViewList(ctx) {
+        try {
+            const { page } = ctx.request.body
+            console.log('page:', page)
+            const one = await OperationVerifyLogDao.getOperationVerifyLogListAndCount(page)
+            if (one) {
+                Common.sendResult(ctx, one)
+            } else {
+                Common.sendResult(ctx, ERRORCODE.NO_USE_TRIPLE)
+            }
+        } catch (error) {
+            console.log(error)
+            Common.sendResult(ctx, ERRORCODE.BASE_ERROR)
+        }
+    }
 
     static async commitAnswer(ctx) {
         try {

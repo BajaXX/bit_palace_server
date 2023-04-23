@@ -8,6 +8,7 @@ const QueryTypes = Sequelize.QueryTypes
 const { mysql_BITPALACE } = require('../core/mysql')
 const UserInfo = require('../models/UserInfo')
 const _ = require('lodash')
+const TripleInfo = require('../models/TripleInfo')
 
 class OperationVerifyLogDao {
     static async save(data) {
@@ -71,7 +72,28 @@ class OperationVerifyLogDao {
         })
         return verifiedAnswers
     }
+    static async getOperationVerifyLogListAndCount(page = 0, pageSize = 20) {
+        console.log(page)
+        const offset = page * pageSize
+        OperationVerifyLog.belongsTo(TripleInfo, { foreignKey: 'tripleID', targetKey: 'tripleID' })
 
+        const { rows: liveViews, count } = await OperationVerifyLog.findAndCountAll({
+            limit: pageSize,
+            offset,
+            order: [['createTime', 'DESC']],
+            include: [
+                {
+                    model: TripleInfo,
+                    required: true // 只返回与 TripleInfo 表有关联的 OperationVerifyLog 行
+                }
+            ]
+            // where: {
+            //     triple: 1
+            // }
+        })
+
+        return { liveViews, count }
+    }
     static async getAwardedUsers() {
         const awardedUsers = await OperationVerifyLog.findAll({
             where: {

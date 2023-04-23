@@ -8,5 +8,6 @@ const router = new Router({
 //Triple
 router.post('/getOneTriple', auth, TripleCtrl.getOneTriple)
 router.post('/commitAnswer', auth, TripleCtrl.commitAnswer)
+router.post('/getLiveViewList', TripleCtrl.getLiveViewList)
 
 module.exports = router
